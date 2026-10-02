@@ -1,0 +1,26 @@
+[project]
+name = "churn-cost-sensitive"
+version = "0.1.0"
+description = "Churn prediction where the decision threshold comes from retention economics, not from accuracy"
+requires-python = ">=3.10"
+dependencies = [
+    "lightgbm>=4.0",
+    "scikit-learn>=1.6",
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
