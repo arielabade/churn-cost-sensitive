@@ -1,9 +1,4 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/header-dark.svg">
-    <img alt="Cost-Sensitive Churn: a churn model is not the deliverable, the decision rule is" src="assets/brand/header-light.svg" width="100%">
-  </picture>
-</p>
+<p align="center"><img alt="Cost-Sensitive Churn: a churn model is not the deliverable, the decision rule is" src="assets/brand/header.svg" width="100%"></p>
 
 <p align="center">
   <img alt="Method stage: retain" src="https://img.shields.io/badge/stage-retain-5B6CFF?style=flat-square&labelColor=050505">
@@ -16,19 +11,9 @@
 The break-even churn probability ranges from 2.7% to 19.6% across customers, so no single global
 cutoff can express it.
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/kpis-dark.svg">
-    <img alt="£10,285 recovered vs the 0.5 default; break-even churn probability 2.7–19.6%; AUC 0.848" src="assets/brand/kpis-light.svg" width="100%">
-  </picture>
-</p>
+<p align="center"><img alt="£10,285 recovered vs the 0.5 default; break-even churn probability 2.7–19.6%; AUC 0.848" src="assets/brand/kpis.svg" width="100%"></p>
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/arc-dark.svg">
-    <img alt="Context, problem, strategy and result of the case" src="assets/brand/arc-light.svg" width="100%">
-  </picture>
-</p>
+<p align="center"><img alt="Context, problem, strategy and result of the case" src="assets/brand/arc.svg" width="100%"></p>
 
 ---
 
@@ -94,12 +79,7 @@ A customer worth less than the offer has an **infinite** break-even threshold. T
 
 ## 04 — Result
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/chart-dark.svg">
-    <img alt="Net value by rule: expected value £48,621; best-F1 £48,237; 0.5 default £38,336; contact everyone £36,950" src="assets/brand/chart-light.svg" width="100%">
-  </picture>
-</p>
+<p align="center"><img alt="Net value by rule: expected value £48,621; best-F1 £48,237; 0.5 default £38,336; contact everyone £36,950" src="assets/brand/chart.svg" width="100%"></p>
 
 | Percentile | Break-even P(churn) |
 | --- | --- |
@@ -168,12 +148,7 @@ notebooks/   threshold exploration
 
 ---
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/track-dark.svg">
-    <img alt="ABADE method: validate, scale, retain, build. This repository: retain" src="assets/brand/track-light.svg" width="100%">
-  </picture>
-</p>
+<p align="center"><img alt="ABADE method: validate, scale, retain, build. This repository: retain" src="assets/brand/track.svg" width="100%"></p>
 
 <p align="center">
   <a href="https://github.com/arielabade/clv-cohort-prediction">← Rank customers by future value</a> &nbsp;·&nbsp;
