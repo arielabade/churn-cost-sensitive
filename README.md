@@ -7,7 +7,7 @@
   <img alt="Data: real, economics declared" src="https://img.shields.io/badge/data-real_%2B_declared_economics-C8B680?style=flat-square&labelColor=050505">
 </p>
 
-**The default 0.5 threshold leaves £10,285 on the table, 21% of the value the campaign could earn.**
+**The default 0.5 threshold leaves £10,286 on the table, 21% of the value the campaign could earn.**
 The break-even churn probability ranges from 2.7% to 19.6% across customers, so no single global
 cutoff can express it.
 
