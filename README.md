@@ -11,7 +11,29 @@
 The break-even churn probability ranges from 2.7% to 19.6% across customers, so no single global
 cutoff can express it.
 
-<p align="center"><img alt="£10,285 recovered vs the 0.5 default; break-even churn probability 2.7–19.6%; AUC 0.848" src="assets/brand/kpis.svg" width="100%"></p>
+<p align="center"><img alt="£10,286 recovered against the 0.5 default; break-even churn probability spans 2.7% to 19.6%; model AUC 0.848 throughout" src="assets/figures/headline.svg" width="100%"></p>
+
+<p align="center"><img alt="Net campaign value by decision rule: per-customer break-even £48,621, best-F1 £48,237, 0.5 default £38,336, contact everyone £36,950" src="assets/figures/strategy_value.svg" width="100%"></p>
+
+> **Decision.** Replace the 0.5 threshold with the per-customer expected-value rule. Same model, same budget, £10,286 more value.
+
+<details>
+<summary><b>What is in this repository</b></summary>
+
+| | |
+| --- | --- |
+| **The question** | Who gets a retention offer that costs money and works only sometimes? |
+| **The data** | Telco churn, 7,043 customers. The retention economics — offer cost, acceptance rate, contact cost — are declared assumptions, isolated in one file. |
+| **The method** | LightGBM for the probability, and a decision rule derived from each customer's own margin at risk. |
+| **The finding** | The model is not the deliverable. The threshold is, and no single global threshold can express it. |
+
+```
+src/churn/  data, the economics, the decision rule, the pipeline, figures
+reports/    per-customer decisions and realised campaign value
+tests/      the break-even algebra and the campaign-value accounting
+```
+
+</details>
 
 <p align="center"><img alt="Context, problem, strategy and result of the case" src="assets/brand/arc.svg" width="100%"></p>
 
@@ -75,11 +97,21 @@ break-even P(churn) = contact_cost / (acceptance * (value_at_risk - offer_cost))
 
 A customer worth less than the offer has an **infinite** break-even threshold. There is a test for it.
 
+```mermaid
+flowchart LR
+  A["Telco churn<br/>7,043 customers"] --> B["train / test split"]
+  B --> C["LightGBM<br/>churn probability"]
+  D["config: offer cost,<br/>acceptance rate, contact cost"] --> E["break-even probability<br/>per customer"]
+  C --> F["contact when risk<br/>clears that customer's bar"]
+  E --> F
+  F --> G["realised campaign value<br/>on held-out customers"]
+  G --> H["reports/ + README figures"]
+```
+
 ---
 
 ## 04 — Result
 
-<p align="center"><img alt="Net value by rule: expected value £48,621; best-F1 £48,237; 0.5 default £38,336; contact everyone £36,950" src="assets/brand/chart.svg" width="100%"></p>
 
 | Percentile | Break-even P(churn) |
 | --- | --- |
@@ -105,6 +137,12 @@ customer values spread out or the offer gets more expensive.
 
 > **Decision.** Replace `predict()`'s 0.5 with the per-customer expected-value rule, and contact 975
 > customers instead of 450.
+
+---
+
+<p align="center"><img alt="Distribution of per-customer break-even churn probability, with the 0.5 default far outside it" src="assets/figures/break_even_spread.svg" width="100%"></p>
+
+<p align="center"><img alt="Predicted risk against each customer's break-even bar, with the contact rule as the diagonal" src="assets/figures/contact_decision.svg" width="100%"></p>
 
 ---
 
