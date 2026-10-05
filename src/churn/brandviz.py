@@ -348,8 +348,44 @@ def kpi_strip(items, width: float = 12.0, height: float = 1.9,
     return fig, axes
 
 
+def _check_glyphs(fig) -> None:
+    """Fail the build on a character the active font cannot draw.
+
+    Text is outlined to paths on save, so a missing glyph does not fall back —
+    it renders as an empty box, and nothing in the build complains. This turns
+    that into an error at the point where it is cheap to fix. (U+2192, the
+    rightwards arrow, is the one that actually got through.)
+    """
+    try:
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        return  # the check is a convenience, never a hard dependency
+
+    family = mpl.rcParams["font.sans-serif"][0]
+    try:
+        cmap = TTFont(mpl.font_manager.findfont(
+            mpl.font_manager.FontProperties(family=family)
+        )).getBestCmap()
+    except Exception:
+        return
+
+    missing = {
+        character
+        for artist in fig.findobj(mpl.text.Text)
+        for character in artist.get_text()
+        if character not in "\n\t" and ord(character) not in cmap
+    }
+    if missing:
+        listed = ", ".join(f"{c!r} (U+{ord(c):04X})" for c in sorted(missing))
+        raise ValueError(
+            f"{family} has no glyph for {listed}. Outlined text does not fall "
+            f"back, so these would render as empty boxes."
+        )
+
+
 def save(fig, path: Path | str, pad: float = 0.34) -> Path:
     """Write the figure as SVG with text outlined, and return the path."""
+    _check_glyphs(fig)
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(path, format="svg", bbox_inches="tight", pad_inches=pad,
