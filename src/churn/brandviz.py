@@ -396,7 +396,9 @@ def save(fig, path: Path | str, pad: float = 0.34) -> Path:
     _check_glyphs(fig)
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    # No creation date in the metadata: the same reports must give the same
+    # bytes, or every re-run shows as a change to review.
     fig.savefig(path, format="svg", bbox_inches="tight", pad_inches=pad,
-                transparent=True)
+                transparent=True, metadata={"Date": None})
     plt.close(fig)
     return path
