@@ -193,6 +193,7 @@ def run(backend: str = "parquet", rebuild: bool = False) -> dict:
 
 
 def main() -> None:
+    """Command-line entry point: ``python -m churn.pipeline [--backend mysql] [--rebuild]``."""
     parser = argparse.ArgumentParser(description="Train, decide and evaluate on the Cinelume data.")
     parser.add_argument("--backend", choices=("parquet", "mysql"), default="parquet")
     parser.add_argument("--rebuild", action="store_true", help="rebuild features even if cached")

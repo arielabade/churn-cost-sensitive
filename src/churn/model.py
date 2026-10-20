@@ -57,6 +57,7 @@ class Split:
     test: pd.DataFrame
 
     def describe(self) -> dict:
+        """Rows, subscribers, date range and churn rate of each slice, for the reports."""
         return {
             name: {
                 "rows": int(len(part)),
@@ -91,6 +92,13 @@ class ChurnModel:
         raise NotImplementedError
 
     def fit(self, train: pd.DataFrame, valid: pd.DataFrame) -> "ChurnModel":
+        """Fit the scorer on past months, then the calibrator on the next ones.
+
+        Calibrating on the validation months rather than on training rows
+        matters twice: the trees have memorised their training rows, so
+        in-sample scores are over-confident; and the later months carry the
+        drift the test months will show.
+        """
         self._fit_scorer(train[list(FEATURES)], train[LABEL].to_numpy())
         # out_of_bounds="clip": a test score outside the validation range gets
         # the nearest calibrated value instead of NaN.
@@ -99,6 +107,7 @@ class ChurnModel:
         return self
 
     def predict_raw(self, frame: pd.DataFrame) -> np.ndarray:
+        """Uncalibrated score: right for ranking (AUC), wrong for multiplying by money."""
         return self._score(frame[list(FEATURES)])
 
     def predict(self, frame: pd.DataFrame) -> np.ndarray:
@@ -107,6 +116,14 @@ class ChurnModel:
 
 
 class LightGBMModel(ChurnModel):
+    """Gradient-boosted trees: the production scorer.
+
+    Hyperparameters are fixed, not tuned: shallow-ish trees (31 leaves) with
+    at least 200 rows per leaf, because a subscriber appears in up to 24
+    training months and small leaves memorise individuals. ``deterministic``
+    and a fixed thread count make the scores bit-for-bit reproducible.
+    """
+
     name = "lightgbm"
 
     def _fit_scorer(self, x, y):

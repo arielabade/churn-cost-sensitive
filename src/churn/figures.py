@@ -40,6 +40,7 @@ RULE_ORDER = ("limiar_0.5", "melhor_f1", "valor_esperado")
 
 
 def brl(value: float, signed: bool = False) -> str:
+    """Money as the README writes it (R$12,345), escaped for matplotlib."""
     # "\\$" because two dollar signs in one matplotlib string switch it to
     # math mode and the text between them is typeset as an equation.
     text = f"R\\${abs(value):,.0f}"
@@ -226,6 +227,7 @@ def contact_decision(decisions: pd.DataFrame) -> Path:
 
 
 def build_all() -> list[Path]:
+    """Redraw every README figure from the committed reports."""
     metrics = json.loads((REPORTS / "metrics.json").read_text())
     segments = pd.read_csv(REPORTS / "rules_by_segment.csv")
     sens = pd.read_csv(REPORTS / "sensitivity.csv")

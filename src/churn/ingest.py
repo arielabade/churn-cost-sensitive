@@ -125,6 +125,7 @@ class MySQLSettings:
     database: str = "cinelume"
 
     def dsn(self) -> str:
+        """Connection string in the form DuckDB's MySQL extension expects."""
         return (f"host={self.host} port={self.port} user={self.user} "
                 f"password={self.password} database={self.database}")
 

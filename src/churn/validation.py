@@ -118,6 +118,11 @@ def causes(test: pd.DataFrame, causes_frame: pd.DataFrame) -> list[dict]:
 
 
 def patterns(importance: pd.Series) -> dict:
+    """Rank of the best feature able to carry each planted pattern and each false clue.
+
+    High rank for a real pattern means the model found it; a false clue near
+    the top is a warning against reading importance as cause.
+    """
     rank = importance.rank(ascending=False).astype(int)
 
     def best(columns):
@@ -131,6 +136,7 @@ def patterns(importance: pd.Series) -> dict:
 
 
 def special_accounts(test: pd.DataFrame, latent: pd.DataFrame) -> dict:
+    """Staff, QA and bot accounts that reached the test set, and whether money was spent on them."""
     kinds = {1: "funcionários", 2: "contas de QA", 3: "bots"}
     joined = test.merge(latent[["conta_id", "especial"]], on="conta_id")
     out = {}
@@ -185,6 +191,7 @@ def reengagement_experiment(frame: pd.DataFrame) -> dict:
 
 
 def millisecond_fix(metrics_key: dict) -> dict:
+    """Share of the planted millisecond rows that the blind unit fix caught."""
     import duckdb
 
     from .config import PARQUET_DIR
@@ -201,6 +208,7 @@ def millisecond_fix(metrics_key: dict) -> dict:
 
 
 def run() -> dict:
+    """Every check, written to reports/validation.json."""
     scale = GENERATOR_SCALE
     latent = pd.read_parquet(ANSWER_KEY / f"latentes_{scale}.parquet")
     causes_frame = pd.read_parquet(ANSWER_KEY / f"causas_cancelamento_{scale}.parquet")

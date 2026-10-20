@@ -58,20 +58,24 @@ def money(value: float, signed: bool = False) -> str:
 
 
 def money_short(value: float) -> str:
+    """Millions written out, for numbers too large to read digit by digit."""
     if abs(value) >= 1e6:
         return f"{'−' if value < 0 else ''}R$\u00a0{abs(value) / 1e6:.1f}\u00a0milhões".replace(".", ",")
     return money(value)
 
 
 def pct(value: float, digits: int = 1) -> str:
+    """Percentage with a decimal comma."""
     return f"{value * 100:.{digits}f}%".replace(".", ",")
 
 
 def integer(value: float) -> str:
+    """Count with a dot for thousands."""
     return f"{int(value):,}".replace(",", ".")
 
 
 def month_label(value: str) -> str:
+    """Cut-off date as the client reads it: mai/26."""
     stamp = pd.Timestamp(value)
     return f"{MONTHS[stamp.month - 1]}/{stamp.year % 100:02d}"
 
@@ -140,6 +144,11 @@ def _mark() -> str:
 
 
 def build() -> Path:
+    """Write docs/dashboard/index.html (and plotly.js beside it) from reports/.
+
+    Every number and every verdict in a title is read or derived from the
+    report files here, so a re-run that changes the result changes the page.
+    """
     metrics = json.loads((REPORTS / "metrics.json").read_text())
     segments = pd.read_csv(REPORTS / "rules_by_segment.csv")
     sens = pd.read_csv(REPORTS / "sensitivity.csv")

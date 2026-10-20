@@ -1,5 +1,13 @@
 """ABADE chart theme: the visual contract every figure in the portfolio obeys.
 
+Role in the pipeline
+--------------------
+Presentation support. Used only by :mod:`churn.figures` to draw the README
+SVGs; the pipeline itself never imports it.
+
+Receives: matplotlib axes and the numbers to draw. Returns: themed panels,
+bars, annotations and SVG files. Depends on: matplotlib only.
+
 Why this file exists
 --------------------
 The portfolio presents itself as one system, so a chart that arrives in a
