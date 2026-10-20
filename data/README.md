@@ -1,16 +1,24 @@
 # Data
 
-Downloaded by the pipeline; not committed.
+Generated locally, never committed (`data/cinelume/` is in `.gitignore`).
 
 ## Source
 
-[Telco Customer Churn](https://github.com/IBM/telco-customer-churn-on-icp4d), IBM. 7,043 customers,
-19 features, 26.5% churn rate.
+**Cinelume**, a fictional Brazilian streaming service, produced by the generator in its own
+source folder (`CINELUME_SOURCE`). `make data` runs it unchanged with its default seed through
+`scripts/generate_data.py`, which only adds intermediate scales. Everything is synthetic.
 
-**All customer data is real.** The retention economics — offer cost, contact cost, acceptance rate,
-gross margin and remaining horizon — are declared assumptions, not measurements. They live in
-`src/churn/config.py`.
+| Path | What |
+| --- | --- |
+| `cinelume/parquet/`, `cinelume/csv/` | the generator's exports, one file per table |
+| `cinelume/warehouse.duckdb` | staged tables and the feature table, for inspection |
+| `cinelume/features.parquet` | one row per subscriber per monthly cut-off |
+| `cinelume/test_scores.parquet` | probabilities on the test months, for the post-hoc check |
 
-The acceptance outcome per customer does not exist in the data, so `campaign_value` draws it at the
-declared rate with a fixed seed. All four decision rules face the same draw, so the comparison is
-fair; the absolute dilution figure is not a forecast.
+Retention economics the dataset does not publish (contact cost, acceptance rates, margin,
+horizon) are declared in `src/churn/config.py`. The acceptance outcome per subscriber does not
+exist in the data, so the campaign accounting draws it once, with a fixed seed, and every rule
+faces the same draw: the comparison is fair; the absolute figures are not a forecast.
+
+Tables, grain, churn definition, what is missing and the data flaws found:
+[docs/DATA_SOURCE.md](../docs/DATA_SOURCE.md).

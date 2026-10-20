@@ -64,6 +64,24 @@ def headline(metrics: dict) -> Path:
     return bv.save(fig, FIGURES / "headline.svg")
 
 
+def arc(metrics: dict) -> Path:
+    """Context, problem, strategy and result in one strip, the README's spine.
+
+    Replaces a hand-drawn brand panel that quoted the Telco numbers: this one
+    is drawn from the reports, so it cannot go stale.
+    """
+    s = metrics["strategies"]
+    left = s["valor_esperado"]["net_value"] - s["limiar_0.5"]["net_value"]
+    fig, _ = bv.kpi_strip([
+        ("Context", "A streaming service with a finite\nretention budget and a churn model"),
+        ("Problem", "An offer costs money and works\nonly sometimes: who should get it?"),
+        ("Strategy", "Calibrate, then contact only where\nexpected value is positive"),
+        ("Result", f"{brl(s['valor_esperado']['net_value'])} net on six held-out months;\n"
+                   f"the 0.5 default leaves {brl(left)} behind"),
+    ], accent_index=3)
+    return bv.save(fig, FIGURES / "arc.svg")
+
+
 def strategy_value(metrics: dict) -> Path:
     """Realised campaign value under each rule, on the same model and months."""
     s = metrics["strategies"]
@@ -233,6 +251,7 @@ def build_all() -> list[Path]:
     sens = pd.read_csv(REPORTS / "sensitivity.csv")
     decisions = pd.read_csv(REPORTS / "decisions_last_month.csv")
     return [
+        arc(metrics),
         headline(metrics),
         strategy_value(metrics),
         by_month(segments),

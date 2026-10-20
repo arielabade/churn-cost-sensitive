@@ -1,105 +1,71 @@
 # Notas para entrevista — churn-cost-sensitive
 
-Documento interno. Não faz parte da documentação pública do projeto.
+Documento interno. Não faz parte da documentação pública do projeto. Números de `reports/`
+(Cinelume, dados simulados, 60 mil contas, teste em mai–out/2026).
 
 ---
 
 ## As 3 decisões técnicas mais importantes
 
-### 1. Threshold por cliente, não global
+### 1. Validação no tempo, com atributos "como estavam" na data de corte
 
-**O que fiz:** resolvi "valor esperado de contatar = 0" para a probabilidade de churn. O
-`value_at_risk` fica no denominador, então o threshold depende do cliente.
+**O que fiz:** uma linha por assinante ativo no dia 1º de cada mês; treino em 2024–2025, calibração
+em jan–abr/2026, teste em mai–out/2026. Plano e método de pagamento são reconstruídos do histórico,
+porque as colunas da tabela de assinaturas são uma foto do último dia.
 
-**Por quê:** cliente de R$110/mês vale 12 meses × 55% de margem = R$726. Cliente de R$25/mês vale
-R$165. Contatar custa o mesmo para os dois. Logo, vale a pena agir sobre o caro com risco muito
-menor.
+**Por quê:** o mesmo assinante aparece em até 24 meses de treino. Split aleatório premia decorar
+gente. Um teste apaga tudo o que aconteceu depois do corte e confere que nenhum atributo muda — e
+pegou um vazamento real (taxa de abertura de e-mail).
 
-**O número que fecha o argumento:** o break-even vai de 2,7% (percentil 10) a 19,6% (percentil 90).
-Sete vezes de variação. Qualquer corte único está fazendo média disso.
+### 2. A regra precifica o peso morto
 
-### 2. Custo da oferta ponderado por aceitação
+**O que fiz:** `E = p·a·(V−O) − (1−p)·d·O − c`. O fiel que aceita o desconto custa a oferta e não
+salva nada. Com d = 0 é a fórmula original, que os testes ainda fixam.
 
-**O que fiz:** `offer_cost × P(churn) × taxa_de_aceitação`, não `offer_cost` para todo mundo contatado.
+**Por quê:** a contabilidade da campanha sempre cobrou esse custo; a regra antiga não sabia dele.
+Uma regra que ignora um custo que o próprio placar cobra está mal especificada.
 
-**Por quê:** a oferta só é paga quando aceita. O contato é pago sempre. São dois custos com naturezas
-diferentes e colapsar os dois erra em direções opostas: cobrar a oferta inteira de todos superestima o
-custo e faz contatar de menos; tratar a margem salva como certa superestima o ganho e faz contatar de
-mais.
+### 3. Achar o bug de unidade antes de confiar no resultado
 
-### 3. Calibração isotônica antes de decidir
+**O que fiz:** a partir do app 6.0, o celular grava tempo assistido em milissegundos. Corrigi
+comparando com a duração de relógio de cada reprodução.
 
-**O que fiz:** calibrei o LightGBM antes de comparar a probabilidade com o threshold.
-
-**Por quê:** AUC é invariante a qualquer transformação monotônica do score. Um modelo pode ordenar
-perfeitamente e colocar o break-even no lugar errado. Como aqui a probabilidade é **multiplicada por
-dinheiro**, ela precisa ser uma probabilidade de verdade, não um ranking. Brier 0,142.
+**Por quê:** sem a correção, o modelo previa 1,9% de churn contra 3,4% observado no teste e a regra
+perdia para o F1. A calibração na validação estava perfeita — o problema só aparecia no tempo.
 
 ---
 
 ## 5 perguntas prováveis, com resposta
 
-### 1. "O ganho sobre o threshold de F1 ótimo foi de 0,8%. Isso justifica a complexidade?"
+### 1. "O ganho sobre o F1 é de R$ 10.761. É real?"
 
-Essa é a pergunta certa e eu coloquei a ressalva no próprio README, não escondi.
+Bootstrap por assinante (não por linha, porque o mesmo assinante aparece em até seis meses): IC 95%
+de R$ 4.272 a R$ 16.741. Ganha nos seis meses. Mas é desigual: no Premium quase empata (+R$ 1.634),
+porque o limiar do Premium (19%) fica perto do corte de F1 (15,5%); no Básico (limiar 26,5%) a
+diferença é R$ 5.105. Em busca paga e indicação o F1 fica levemente à frente.
 
-Nesse dataset, com essa economia, varrer threshold para F1 pega quase todo o ganho. O resultado que eu
-defendo não é contra o F1 ótimo — é contra o **0,5**, que é o que sai do `predict()` por padrão e o
-que a maioria dos projetos entrega. Contra ele a diferença é £10.285, ou 21% do valor alcançável.
+### 2. "De onde vem a taxa de aceite de 35%?"
 
-E tem uma razão estrutural para o gap ser pequeno aqui: a dispersão de valor entre clientes do Telco é
-moderada. Num negócio com faixa de ticket mais larga, ou com oferta mais cara, o corte global quebra
-mais feio. A fórmula mostra exatamente quando: quanto maior a variância de `value_at_risk`, pior o
-threshold único.
+Premissa declarada. Nenhuma oferta foi feita a assinante ativo nos dados. Na sensibilidade, a regra
+fica positiva em todas as taxas; o F1 perde dinheiro em 8 de 20 cenários. Com aceite de 15% o limiar
+0,5 ganha da regra (R$ 3.662 contra R$ 1.865) — está no README.
 
-Se me perguntarem "então use F1", eu respondo: F1 ótimo não te diz **quanto** você ganha, nem como o
-resultado muda se a taxa de aceitação cair de 35% para 20%. O modelo econômico diz.
+### 3. "Por que não contatar todo mundo?"
 
-### 2. "De onde vem a taxa de aceitação de 35%?"
+Salva 2.000 e perde R$ 3,3 milhões. A oferta (cerca de uma mensalidade) cai em 177 mil
+assinantes-mês para salvar 2 mil.
 
-É premissa declarada. O dataset não publica, e eu não invento que publica.
+### 4. "Você usou o gabarito da simulação?"
 
-É também a premissa mais frágil do projeto, e eu diria isso numa reunião antes que alguém perguntasse.
-Todo business case de retenção depende dela e quase nenhum a declara.
+Só depois dos relatórios fechados, num módulo separado. Teste estático, checagem de caminho e hook
+de auditoria impedem o treino de ler a pasta. O modelo recuperou o engajamento latente (Spearman
+−0,54). Pontos cegos: fim de série e buffering. E eu errei: tratei o e-mail de reengajamento como
+disparado por regra, mas era sorteado — efeito nulo, como plantado.
 
-A única forma de aprender o número real é segurar um grupo de controle e medir. Nenhum modelo de churn
-substitui isso. É por isso que no README a limitação principal não é o modelo, é a falta do
-experimento.
+### 5. "Está pronto para produção?"
 
-### 3. "Contatar todo mundo salva mais clientes. Por que não fazer isso?"
-
-Salva mesmo: 146 contra 135. E destrói valor: £36.950 contra £48.621.
-
-A conta é simples: a oferta é paga em 1.761 contatos para reter 146 pessoas. O custo de ofertar para
-quem nunca ia sair come a margem de quem ia.
-
-Essa linha está na tabela de propósito. É o contraponto que mostra que o objetivo não é maximizar
-clientes salvos, é maximizar valor — e que as duas coisas apontam para lados diferentes.
-
-### 4. "Como você tratou o TotalCharges em branco?"
-
-São 11 linhas. Todas com `tenure = 0` — são clientes novos que ainda não foram faturados.
-
-Preenchi com 0, não com a média. Preencher com a média inventaria onze meses de histórico de cobrança
-para quem não tem nenhum, e aí `tenure` passaria a contradizer `TotalCharges` — uma inconsistência que
-modelo de árvore explora alegremente e que vira ganho fantasma na validação.
-
-Tem teste garantindo que todo cliente com tenure 0 tem TotalCharges 0.
-
-### 5. "Esse modelo está pronto para produção?"
-
-O modelo não, e a razão não é performance.
-
-Faltam duas coisas. A primeira é validação temporal: o dataset é um snapshot sem coluna de data, então
-validei com split aleatório estratificado. Modelo de churm em produção tem que ser validado num
-período posterior ao de treino, porque o comportamento muda.
-
-A segunda é mais séria e é conceitual: isso prevê **quem sai**, não **quem é persuadível**. Parte dos
-clientes de score alto vai sair com oferta ou sem. Parte ficaria de qualquer jeito. O dinheiro está na
-diferença — no uplift — e uplift não se estima com modelo de churn, se estima com experimento.
-
-O que eu levaria para produção primeiro não seria o modelo, seria o teste controlado que mede a taxa
-de aceitação real.
+A regra sim; a premissa de aceite, não. O próximo passo é um teste com grupo de controle para medir
+aceite e peso morto, e recalibrar o modelo todo mês com o último mês fechado.
 
 ---
 
@@ -107,11 +73,13 @@ de aceitação real.
 
 | | |
 | --- | --- |
-| Clientes | 7.043 (5.282 treino / 1.761 teste) |
-| Taxa de churn | 26,5% |
-| AUC / Brier | 0,848 / 0,142 |
-| Break-even: p10 / mediana / p90 | 2,7% / 4,1% / 19,6% |
-| Valor líquido: threshold 0,5 | £38.336 (450 contatos) |
-| Valor líquido: valor esperado | £48.621 (975 contatos) |
-| Valor líquido: contatar todos | £36.950 (1.761 contatos) |
-| Dinheiro deixado na mesa pelo 0,5 | £10.285 (21%) |
+| Dados | 59.952 contas, 37 meses, 11,2 mi reproduções, 56,2 mi eventos |
+| Linhas do modelo | 605.245 (teste: 177.089 assinantes-mês) |
+| Churn voluntário mensal | 3,65% |
+| AUC teste / logística | 0,863 / 0,848 |
+| Previsto vs observado (teste) | 3,33% / 3,36% |
+| Limiar de break-even | 16% a 29% conforme o plano |
+| Valor líquido: limiar 0,5 | R$ 23.182 (589 contatos) |
+| Valor líquido: melhor F1 | R$ 43.856 (5.774 contatos) |
+| Valor líquido: valor esperado | R$ 54.617 (3.255 contatos) |
+| Deixado na mesa pelo 0,5 | R$ 31.435 |
