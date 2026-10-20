@@ -1,0 +1,61 @@
+# MySQL 8 with the Cinelume schema, for the churn pipeline's MySQL backend.
+#
+# Separate from the source repository's own compose file on purpose: its own
+# container (cinelume-churn-mysql), its own volume and port 3317, so starting
+# this never touches a database the source folder may already hold.
+#
+#   CINELUME_SOURCE=/path/to/streaming docker compose -f infra/docker-compose.yml up -d mysql
+#   CINELUME_SOURCE=/path/to/streaming docker compose -f infra/docker-compose.yml --profile carga run --rm carga
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: cinelume-churn-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CINELUME_MYSQL_PASSWORD:-cinelume}
+      MYSQL_DATABASE: cinelume
+      TZ: UTC
+    command:
+      - --local-infile=1
+      - --default-time-zone=+00:00
+      - --innodb-buffer-pool-size=${MYSQL_BUFFER_POOL:-512M}
+      - --max-allowed-packet=256M
+    ports:
+      - "${CINELUME_MYSQL_PORT:-3317}:3306"
+    volumes:
+      - ${CINELUME_SOURCE:?set CINELUME_SOURCE to the Cinelume folder}/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - cinelume_churn_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${CINELUME_MYSQL_PASSWORD:-cinelume}"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+  carga:
+    image: mysql:8.4
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PWD: ${CINELUME_MYSQL_PASSWORD:-cinelume}
+      # 0 by default: pagamentos has one row (id 664783) whose fatura_id does
+      # not exist in faturas. With checks on, MySQL rejects it and the row
+      # count no longer matches the export; the pipeline never joins payments
+      # to invoices, so the row is harmless and MySQL keeps exactly what the
+      # Parquet export holds. See docs/DATA_SOURCE.md.
+      FK_CHECKS: ${FK_CHECKS:-0}
+      # Business tables only, in foreign-key order. The usage logs (tens of
+      # millions of rows) are read from Parquet; add them here to load them too.
+      TABELAS: >-
+        canais investimento_diario planos precos generos estudios pessoas titulos titulo_generos
+        titulo_elenco episodios catalogo_disponibilidade contas perfis dispositivos assinaturas
+        assinatura_eventos cupons cupom_resgates faturas pagamentos pesquisa_cancelamento
+        notificacoes tickets_suporte nps
+    volumes:
+      - ${CINELUME_DATA:-../data/cinelume}/csv:/dados/csv:ro
+      - ./load_mysql.sh:/scripts/load_mysql.sh:ro
+    entrypoint: ["bash", "/scripts/load_mysql.sh"]
+    profiles: ["carga"]
+
+volumes:
+  cinelume_churn_mysql:
