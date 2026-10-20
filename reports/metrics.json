@@ -1,55 +1,235 @@
 {
-  "rows": 7043,
-  "train_rows": 5282,
-  "test_rows": 1761,
-  "churn_rate": 0.2653698707936959,
-  "model": {
-    "roc_auc": 0.8481692807191155,
-    "brier": 0.14158094719373074,
-    "best_f1_threshold": 0.18,
-    "best_f1": 0.6523972602739726
+  "data": {
+    "source": "Cinelume (streaming simulado), gerado pelo gerador do próprio dataset",
+    "scale": "x60",
+    "seed": 20231001,
+    "contas": 59952,
+    "assinaturas": 68992,
+    "faturas": 609658,
+    "pagamentos": 665081,
+    "sessoes_app": 10594094,
+    "reproducoes": 11151592,
+    "eventos_app": 56231976,
+    "primeiro_cadastro": "2023-10-01",
+    "ultimo_cadastro": "2026-11-01",
+    "provenance": {
+      "canais": "parquet",
+      "planos": "parquet",
+      "precos": "parquet",
+      "contas": "parquet",
+      "perfis": "parquet",
+      "dispositivos": "parquet",
+      "assinaturas": "parquet",
+      "assinatura_eventos": "parquet",
+      "cupons": "parquet",
+      "cupom_resgates": "parquet",
+      "faturas": "parquet",
+      "pagamentos": "parquet",
+      "notificacoes": "parquet",
+      "tickets_suporte": "parquet",
+      "nps": "parquet",
+      "sessoes_app": "parquet",
+      "eventos_app": "parquet",
+      "reproducoes": "parquet"
+    },
+    "feature_rows": 605245,
+    "subscribers_scored": 55278,
+    "cutoffs": 34,
+    "churn_rate": 0.036499,
+    "involuntary_rate": 0.018269
   },
+  "split": {
+    "train": {
+      "rows": 324621,
+      "subscribers": 37659,
+      "first_cutoff": "2024-01-01",
+      "last_cutoff": "2025-12-01",
+      "churn_rate": 0.038417
+    },
+    "valid": {
+      "rows": 103535,
+      "subscribers": 30680,
+      "first_cutoff": "2026-01-01",
+      "last_cutoff": "2026-04-01",
+      "churn_rate": 0.035437
+    },
+    "test": {
+      "rows": 177089,
+      "subscribers": 37499,
+      "first_cutoff": "2026-05-01",
+      "last_cutoff": "2026-10-01",
+      "churn_rate": 0.033605
+    }
+  },
+  "economics": {
+    "offer_cost": 45.0,
+    "contact_cost": 6.0,
+    "acceptance_rate": 0.35,
+    "non_churner_acceptance": 0.35,
+    "gross_margin": 0.55,
+    "expected_remaining_months": 12,
+    "currency": "BRL",
+    "retention_coupon": "VOLTA50",
+    "offer_terms": {
+      "codigo": "VOLTA50",
+      "tipo_desconto": "percentual",
+      "valor_desconto": 50.0,
+      "duracao_ciclos": 2
+    }
+  },
+  "models": {
+    "lightgbm": {
+      "valid": {
+        "roc_auc": 0.858365,
+        "pr_auc": 0.286754,
+        "brier": 0.029144,
+        "log_loss": 0.115838,
+        "mean_predicted": 0.035437,
+        "observed_rate": 0.035437
+      },
+      "test": {
+        "roc_auc": 0.86292,
+        "pr_auc": 0.282537,
+        "brier": 0.027833,
+        "log_loss": 0.111078,
+        "mean_predicted": 0.033316,
+        "observed_rate": 0.033605
+      }
+    },
+    "logistic": {
+      "valid": {
+        "roc_auc": 0.84709,
+        "pr_auc": 0.201146,
+        "brier": 0.030673,
+        "log_loss": 0.121036,
+        "mean_predicted": 0.035437,
+        "observed_rate": 0.035437
+      },
+      "test": {
+        "roc_auc": 0.848297,
+        "pr_auc": 0.157927,
+        "brier": 0.0303,
+        "log_loss": 0.118876,
+        "mean_predicted": 0.035807,
+        "observed_rate": 0.033605
+      }
+    }
+  },
+  "best_f1_threshold": 0.155,
+  "best_f1_on_valid": 0.314363,
+  "best_f1_threshold_logistic": 0.135,
   "break_even_probability": {
-    "median": 0.04075519374000224,
-    "p10": 0.02749103105111957,
-    "p90": 0.19556077050943577
+    "p10": 0.191537,
+    "median": 0.205741,
+    "p90": 0.264939,
+    "min": 0.15775,
+    "max": 0.287624,
+    "never_worth_contacting": 0,
+    "value_at_risk_p10": 151.14,
+    "value_at_risk_p90": 428.34
   },
   "strategies": {
-    "accuracy_0.5": {
-      "contacted": 450,
-      "customers_saved": 92,
-      "margin_saved": 48280.65,
-      "offer_spend": 7245.0,
-      "contact_spend": 2700.0,
-      "net_value": 38335.65,
-      "threshold": 0.5
+    "limiar_0.5": {
+      "contacted": 589.0,
+      "customers_saved": 124.0,
+      "margin_saved": 34038.62,
+      "offer_spend": 7322.55,
+      "contact_spend": 3534.0,
+      "net_value": 23182.07
     },
-    "best_f1": {
-      "contacted": 701,
-      "customers_saved": 123,
-      "margin_saved": 63558.33,
-      "offer_spend": 11115.0,
-      "contact_spend": 4206.0,
-      "net_value": 48237.33,
-      "threshold": 0.18
+    "melhor_f1": {
+      "contacted": 5774.0,
+      "customers_saved": 590.0,
+      "margin_saved": 162786.58,
+      "offer_spend": 84286.5,
+      "contact_spend": 34644.0,
+      "net_value": 43856.08
     },
-    "expected_value": {
-      "contacted": 975,
-      "customers_saved": 135,
-      "margin_saved": 69366.33,
-      "offer_spend": 14895.0,
-      "contact_spend": 5850.0,
-      "net_value": 48621.33,
-      "threshold": NaN
+    "valor_esperado": {
+      "contacted": 3255.0,
+      "customers_saved": 430.0,
+      "margin_saved": 124758.81,
+      "offer_spend": 50611.45,
+      "contact_spend": 19530.0,
+      "net_value": 54617.36
     },
-    "contact_everyone": {
-      "contacted": 1761,
-      "customers_saved": 146,
-      "margin_saved": 74516.31,
-      "offer_spend": 27000.0,
-      "contact_spend": 10566.0,
-      "net_value": 36950.31,
-      "threshold": 0.0
+    "contatar_todos": {
+      "contacted": 177089.0,
+      "customers_saved": 2000.0,
+      "margin_saved": 575641.66,
+      "offer_spend": 2812856.65,
+      "contact_spend": 1062534.0,
+      "net_value": -3299748.99
+    },
+    "contatar_ninguem": {
+      "contacted": 0.0,
+      "customers_saved": 0.0,
+      "margin_saved": 0.0,
+      "offer_spend": 0.0,
+      "contact_spend": 0.0,
+      "net_value": 0.0
     }
+  },
+  "strategies_logistic": {
+    "limiar_0.5": {
+      "contacted": 0.0,
+      "customers_saved": 0.0,
+      "margin_saved": 0.0,
+      "offer_spend": 0.0,
+      "contact_spend": 0.0,
+      "net_value": 0.0
+    },
+    "melhor_f1": {
+      "contacted": 10242.0,
+      "customers_saved": 714.0,
+      "margin_saved": 193509.03,
+      "offer_spend": 148814.2,
+      "contact_spend": 61452.0,
+      "net_value": -16757.17
+    },
+    "valor_esperado": {
+      "contacted": 3897.0,
+      "customers_saved": 331.0,
+      "margin_saved": 99011.66,
+      "offer_spend": 67494.483333,
+      "contact_spend": 23382.0,
+      "net_value": 8135.176667
+    },
+    "contatar_todos": {
+      "contacted": 177089.0,
+      "customers_saved": 2000.0,
+      "margin_saved": 575641.66,
+      "offer_spend": 2812856.65,
+      "contact_spend": 1062534.0,
+      "net_value": -3299748.99
+    },
+    "contatar_ninguem": {
+      "contacted": 0.0,
+      "customers_saved": 0.0,
+      "margin_saved": 0.0,
+      "offer_spend": 0.0,
+      "contact_spend": 0.0,
+      "net_value": 0.0
+    }
+  },
+  "bootstrap": {
+    "valor_esperado_vs_melhor_f1": {
+      "gap": 10761.28,
+      "ci_low": 4271.862167,
+      "ci_high": 16740.783083,
+      "share_positive": 0.999,
+      "subscribers": 37499
+    },
+    "valor_esperado_vs_limiar_0.5": {
+      "gap": 31435.29,
+      "ci_low": 21783.496833,
+      "ci_high": 41080.289417,
+      "share_positive": 1.0,
+      "subscribers": 37499
+    }
+  },
+  "uplift": {
+    "available": false,
+    "reason": "o dataset não tem grupo de controle nem tratamento de retenção aleatorizado; reengajamento e winback são disparados por regra, não por sorteio"
   }
 }

@@ -1,7 +1,7 @@
 [project]
 name = "churn-cost-sensitive"
 version = "0.1.0"
-description = "Churn prediction where the decision threshold comes from retention economics, not from accuracy"
+description = "Churn decision rule from retention economics, validated on months the model never saw"
 requires-python = ">=3.10"
 dependencies = [
     "lightgbm>=4.0",
@@ -9,10 +9,13 @@ dependencies = [
     "pandas>=2.0",
     "pyarrow>=14.0",
     "matplotlib>=3.7",
+    "duckdb>=1.1",
+    "plotly>=5.20",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]
+generator = ["faker>=20"]  # the Cinelume generator's only extra dependency
 
 [build-system]
 requires = ["setuptools>=68"]
