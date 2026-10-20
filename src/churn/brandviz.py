@@ -89,6 +89,9 @@ def apply_theme() -> None:
             "font.family": "sans-serif",
             "font.sans-serif": stack,
             "svg.fonttype": "path",
+            # Fixed salt: clip-path ids stop changing on every run, so a
+            # rebuild with the same reports leaves git clean.
+            "svg.hashsalt": "abade-churn",
             "figure.facecolor": "none",
             "savefig.facecolor": "none",
             "savefig.transparent": True,
