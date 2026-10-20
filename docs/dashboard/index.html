@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retenção Cinelume · ABADE</title>
+<meta name="description" content="Quem deve receber a oferta de retenção: a regra de decisão por valor esperado, avaliada em seis meses que o modelo nunca viu. Dados simulados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --carbon: #050505; --ivory: #F6F5F0; --cobalt: #4353E6;
+  --bg: var(--ivory); --surface: #FFFFFF; --ink: #050505; --muted: #5C6168; --line: #E2E0D7;
+  --accent: #4353E6; --pos: #1F7A55; --neg: #B3324A; --warn-bg: #FFF4D6; --warn-ink: #5A4100;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #050505; --surface: #111214; --ink: #F6F5F0; --muted: #9BA2AA; --line: #24262B;
+    --accent: #5B6CFF; --pos: #3DBB8A; --neg: #E8687D; --warn-bg: #2A2208; --warn-ink: #F2D78A;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #050505; --surface: #111214; --ink: #F6F5F0; --muted: #9BA2AA; --line: #24262B;
+  --accent: #5B6CFF; --pos: #3DBB8A; --neg: #E8687D; --warn-bg: #2A2208; --warn-ink: #F2D78A;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 Lato, "Helvetica Neue", Arial, sans-serif; }
+header.top { background: var(--carbon); color: var(--ivory); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
+.brand { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: .14em; }
+.mark { width: 34px; height: 27px; color: var(--ivory); }
+.brand small { font-weight: 400; letter-spacing: .02em; color: #9BA2AA; }
+button.theme { background: transparent; color: var(--ivory); border: 1px solid #3A3E46; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 14px; cursor: pointer; }
+.hero { padding: 28px 0 36px; }
+.hero h1 { font-size: clamp(24px, 4vw, 38px); line-height: 1.2; margin: 0 0 14px; font-weight: 900; max-width: 30ch; }
+.hero p { color: #C9CCD1; margin: 0; max-width: 70ch; }
+.warn { background: var(--warn-bg); color: var(--warn-ink); border-radius: 12px; padding: 12px 16px; margin: 20px 0 0; font-size: 15px; }
+.warn strong { font-weight: 900; }
+main section { padding: 36px 0 8px; border-bottom: 1px solid var(--line); }
+.eyebrow { color: var(--accent); font-weight: 900; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 6px; }
+h2 { font-size: clamp(20px, 2.6vw, 27px); line-height: 1.25; margin: 0 0 10px; font-weight: 900; max-width: 40ch; }
+h3 { font-size: 18px; margin: 22px 0 6px; }
+h4 { font-size: 17px; margin: 22px 0 6px; }
+p { max-width: 72ch; }
+.lead { color: var(--muted); margin: 0 0 18px; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0 8px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.kpi .v { font-size: clamp(22px, 3vw, 30px); font-weight: 900; line-height: 1.1; }
+.kpi .v.accent { color: var(--accent); }
+.kpi .l { color: var(--muted); font-size: 14px; margin-top: 6px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 12px 4px; margin: 14px 0; }
+.chart { width: 100%; height: 360px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid3.g12 { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.grid3.g11 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid3 .chart { height: 300px; }
+.grid3 h3 { margin: 6px 6px 0; font-size: 15px; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 12px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; background: var(--surface); }
+caption { text-align: left; color: var(--muted); font-size: 14px; padding: 0 0 8px; }
+th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+th:first-child { text-align: left; }
+thead th { color: var(--muted); font-weight: 700; font-size: 13px; }
+tr.hl th, tr.hl td { font-weight: 900; color: var(--accent); }
+td.pos { color: var(--pos); font-weight: 700; } td.neg { color: var(--neg); font-weight: 700; }
+.rec { background: var(--carbon); color: var(--ivory); border-radius: 20px; padding: 24px; margin: 18px 0; }
+.rec h2 { color: var(--ivory); }
+.rec ol { margin: 0; padding-left: 20px; } .rec li { margin: 8px 0; max-width: 72ch; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; margin: 18px 0 36px; }
+summary { cursor: pointer; font-weight: 900; }
+details[open] summary { margin-bottom: 8px; }
+footer { color: var(--muted); font-size: 14px; padding: 24px 0 40px; }
+footer a, main a { color: var(--accent); }
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid3, .grid3.g12, .grid3.g11 { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .kpis { grid-template-columns: 1fr; } .chart { height: 320px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand"><svg class="mark" viewBox="0 0 128 100" aria-hidden="true"><path d="M80.82 32.28 L76.70 36.70 L74.68 39.18 L72.73 41.87 L71.16 44.34 L69.96 46.59 L69.36 48.16 L69.06 49.51 L69.06 50.94 L69.21 51.61 L69.66 52.81 L70.41 54.23 L77.90 64.64 L80.15 68.09 L82.62 72.36 L83.75 74.61 L84.79 77.15 L85.39 79.03 L85.99 81.95 L86.14 83.45 L86.14 85.54 L85.92 87.42 L85.17 90.34 L84.04 92.73 L82.70 94.68 L80.60 96.85 L78.05 98.73 L76.25 99.70 L75.88 99.78 L75.88 99.93 L127.49 99.93 L127.42 99.78 L126.89 99.63 L125.02 98.73 L121.87 96.93 L119.63 95.43 L117.30 93.63 L115.51 92.06 L112.73 89.29 L109.81 85.84 L107.87 83.15 L105.24 78.95 L103.15 74.98 L102.70 74.31 L102.10 72.96 L101.35 71.69 L100.75 70.34 L100.30 69.66 L99.40 67.72 L98.05 65.24 L97.15 63.30 L96.55 62.32 L93.41 55.96 L92.96 55.28 L92.06 53.33 L91.46 52.36 L90.86 51.01 L90.56 50.64 L89.96 49.29 L87.72 45.17 L87.27 44.12 L86.82 43.45 L85.92 41.57 L85.54 41.05 L84.57 39.03 L84.12 38.35 L84.04 38.05 L81.72 33.86 L80.97 32.28Z M46.82 32.28 L46.59 32.28 L45.02 35.36 L44.49 36.18 L43.75 37.75 L37.90 48.61 L37.00 50.49 L36.55 51.16 L35.66 53.03 L35.21 53.71 L34.16 55.88 L33.86 56.25 L32.66 58.73 L32.21 59.40 L31.31 61.27 L30.11 63.37 L29.96 63.82 L29.06 65.32 L27.57 68.31 L26.22 70.64 L22.77 77.15 L20.15 81.72 L17.75 85.39 L16.40 87.19 L14.46 89.51 L12.28 91.76 L10.04 93.78 L7.49 95.73 L4.49 97.68 L1.35 99.33 L0.30 99.78 L0.07 99.78 L0.00 99.85 L0.07 99.93 L51.69 99.93 L51.76 99.85 L49.66 98.80 L48.61 98.13 L47.12 96.93 L45.39 95.21 L44.72 94.38 L43.22 91.99 L42.10 89.21 L41.57 86.74 L41.42 85.24 L41.42 83.82 L41.65 81.50 L42.25 78.80 L42.70 77.38 L43.45 75.43 L44.72 72.73 L46.29 69.89 L47.87 67.34 L51.76 61.65 L56.40 55.28 L57.45 53.63 L57.90 52.51 L58.05 52.36 L58.35 51.39 L58.43 49.36 L58.20 48.24 L57.60 46.59 L56.40 44.42 L56.40 44.27 L54.61 41.42 L51.24 37.08Z M63.67 0.00 L63.22 1.05 L62.77 1.72 L62.47 2.47 L60.37 6.29 L60.07 7.04 L59.33 8.24 L59.03 8.99 L55.73 14.98 L55.06 16.40 L48.91 27.87 L48.76 28.31 L53.18 32.73 L56.48 36.63 L58.73 39.63 L61.12 43.07 L63.67 47.42 L63.90 47.49 L63.90 47.34 L64.94 45.62 L64.94 45.47 L66.52 42.92 L68.76 39.63 L70.79 36.93 L74.61 32.43 L78.80 28.16 L70.64 12.73 L69.74 11.24 L69.44 10.49 L68.54 8.99 L68.24 8.24 L67.34 6.74 L66.59 5.17 L66.29 4.79 L65.99 4.04 L64.79 1.95 L63.90 0.07Z" fill="currentColor" fill-rule="evenodd"/></svg><span>ABADE <small>· Retenção Cinelume</small></span></div>
+      <button class="theme" type="button" id="theme" aria-label="Alternar tema claro ou escuro">Tema</button>
+    </div>
+    <div class="hero">
+      <p class="eyebrow" style="color:#8C98FF">Resumo executivo</p>
+      <h1>Decidir quem recebe a oferta pelo valor de cada assinante rendeu R$ 54.617 em seis meses: R$ 31.435 a mais que o limiar padrão e R$ 10.761 a mais que o melhor limiar de F1.</h1>
+      <p>Mesmo modelo, mesmos 177.089 assinantes-mês de maio a outubro de 2026, meses que o modelo nunca viu.
+      Só muda a regra que decide quem recebe a oferta de retenção.</p>
+      <div class="warn" role="note"><strong>Dados simulados.</strong> A Cinelume é um streaming fictício; todos os
+      clientes, valores e eventos foram gerados por um simulador. Os números ilustram o método e não descrevem
+      nenhuma empresa real.</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section aria-labelledby="s-kpi">
+    <h2 id="s-kpi">Os números que importam</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="v accent">R$ 54.617</div><div class="l">Valor líquido da campanha com a regra por cliente, em seis meses</div></div>
+      <div class="kpi"><div class="v">R$ 31.435</div><div class="l">Deixados na mesa pelo limiar padrão de 0,5 (IC 95%: R$ 21.783 a R$ 41.080)</div></div>
+      <div class="kpi"><div class="v">+R$ 10.761</div><div class="l">Sobre o melhor limiar de F1 (IC 95%: R$ 4.272 a R$ 16.741)</div></div>
+      <div class="kpi"><div class="v">3.255</div><div class="l">Contatos para salvar 430 assinantes</div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-mesa">
+    <p class="eyebrow">O limiar padrão</p>
+    <h2 id="s-mesa">O limiar de 0,5 contata só 589 assinantes e deixa R$ 31.435 na mesa</h2>
+    <p class="lead">O corte de 0,5 é o que sai de um modelo sem nenhuma informação de negócio. Ele só oferece
+    desconto a quem tem mais de 50% de chance de sair; mas, com a economia da Cinelume, a oferta já se paga a
+    partir de 16% a 29% de risco, conforme o plano. O limiar de F1 (15,5%) erra para o outro
+    lado: contata 5.774 pessoas, várias abaixo da conta que fecha.</p>
+    <div class="card"><div class="chart" id="regras" role="img" aria-label="Valor líquido por regra de decisão"></div></div>
+  </section>
+
+  <section aria-labelledby="s-regras">
+    <p class="eyebrow">Comparação das regras</p>
+    <h2 id="s-regras">Contatar todos salva mais gente e destrói valor: 2.000 salvos por −R$ 3,3 milhões</h2>
+    <p class="lead">O objetivo não é salvar o maior número de assinantes; é gastar o orçamento onde a oferta se
+    paga. Quem não ia sair também aceita o desconto, e esse custo cai sobre cada contato desnecessário.</p>
+    <div class="table-wrap"><table>
+      <caption>Seis campanhas mensais (mai–out/2026), mesma aceitação simulada para todas as regras</caption>
+      <thead><tr><th scope="col">Regra</th><th scope="col">Contatados</th><th scope="col">Salvos</th>
+      <th scope="col">Custo (oferta + contato)</th><th scope="col">Margem salva</th><th scope="col">Valor líquido</th></tr></thead>
+      <tbody><tr><th scope='row'>Limiar padrão 0,5</th><td>589</td><td>124</td><td>R$ 10.857</td><td>R$ 34.039</td><td class='num'>R$ 23.182</td></tr><tr><th scope='row'>Melhor F1</th><td>5.774</td><td>590</td><td>R$ 118.930</td><td>R$ 162.787</td><td class='num'>R$ 43.856</td></tr><tr class='hl'><th scope='row'>Valor esperado por cliente</th><td>3.255</td><td>430</td><td>R$ 70.141</td><td>R$ 124.759</td><td class='num'>R$ 54.617</td></tr><tr><th scope='row'>Contatar todos</th><td>177.089</td><td>2.000</td><td>R$ 3.875.391</td><td>R$ 575.642</td><td class='num'>−R$ 3,3 milhões</td></tr><tr><th scope='row'>Contatar ninguém</th><td>0</td><td>0</td><td>R$ 0</td><td>R$ 0</td><td class='num'>R$ 0</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="s-seg">
+    <p class="eyebrow">Por mês, plano e canal</p>
+    <h2 id="s-seg">A regra vence o F1 em todos os 6 meses; a vantagem é menor no Premium e o F1 fica à frente em 2 canais</h2>
+    <p class="lead">Por mês, a regra ganha mais em mai/26 (+R$ 3.730 sobre o F1); vence o F1 em todos os meses. Por plano, ganha mais em Básico (+R$ 5.105 sobre o F1); vence o F1 em todos os planos. Por canal, ganha mais em Orgânico (+R$ 5.945 sobre o F1); perde por pouco em Busca paga e Indicação (−R$ 408, −R$ 312).
+    Onde o limiar do plano fica perto do corte de F1 (Premium, 19% contra 15,5%), as duas regras contatam quase as mesmas pessoas; onde fica longe (Básico, 26%), a diferença aparece.</p>
+    <div class="card"><h3>Por mês de teste</h3><div class="chart" id="meses" role="img" aria-label="Valor líquido por mês e regra"></div></div>
+    <div class="grid3 g12">
+      <div class="card"><h3>Por plano</h3><div class="chart" id="planos" role="img" aria-label="Valor líquido por plano e regra"></div></div>
+      <div class="card"><h3>Por canal de aquisição</h3><div class="chart" id="canais" role="img" aria-label="Valor líquido por canal e regra"></div></div>
+    </div>
+    <details><summary>Tabelas por segmento</summary>
+      <div class="table-wrap"><table><caption>Por mês</caption><thead><tr><th scope="col">Mês</th><th scope="col">Limiar 0,5</th><th scope="col">Melhor F1</th><th scope="col">Regra por cliente</th><th scope="col">Regra − F1</th></tr></thead><tbody><tr><th scope='row'>mai/26</th><td>R$ 4.574</td><td>R$ 5.291</td><td>R$ 9.021</td><td class='pos'>+R$ 3.730</td></tr><tr><th scope='row'>jun/26</th><td>R$ 3.812</td><td>R$ 8.546</td><td>R$ 9.607</td><td class='pos'>+R$ 1.061</td></tr><tr><th scope='row'>jul/26</th><td>R$ 3.721</td><td>R$ 4.661</td><td>R$ 7.069</td><td class='pos'>+R$ 2.408</td></tr><tr><th scope='row'>ago/26</th><td>R$ 2.223</td><td>R$ 7.338</td><td>R$ 8.148</td><td class='pos'>+R$ 811</td></tr><tr><th scope='row'>set/26</th><td>R$ 3.671</td><td>R$ 7.595</td><td>R$ 9.081</td><td class='pos'>+R$ 1.487</td></tr><tr><th scope='row'>out/26</th><td>R$ 5.181</td><td>R$ 10.425</td><td>R$ 11.690</td><td class='pos'>+R$ 1.265</td></tr></tbody></table></div>
+      <div class="table-wrap"><table><caption>Por plano</caption><thead><tr><th scope="col">Plano</th><th scope="col">Limiar 0,5</th><th scope="col">Melhor F1</th><th scope="col">Regra por cliente</th><th scope="col">Regra − F1</th></tr></thead><tbody><tr><th scope='row'>Básico</th><td>R$ 4.990</td><td>R$ 2.977</td><td>R$ 8.082</td><td class='pos'>+R$ 5.105</td></tr><tr><th scope='row'>Padrão</th><td>R$ 5.214</td><td>R$ 8.475</td><td>R$ 12.498</td><td class='pos'>+R$ 4.023</td></tr><tr><th scope='row'>Premium</th><td>R$ 12.978</td><td>R$ 32.404</td><td>R$ 34.038</td><td class='pos'>+R$ 1.634</td></tr></tbody></table></div>
+      <div class="table-wrap"><table><caption>Por canal</caption><thead><tr><th scope="col">Canal</th><th scope="col">Limiar 0,5</th><th scope="col">Melhor F1</th><th scope="col">Regra por cliente</th><th scope="col">Regra − F1</th></tr></thead><tbody><tr><th scope='row'>Busca paga</th><td>R$ 3.285</td><td>R$ 11.035</td><td>R$ 10.627</td><td class='neg'>−R$ 408</td></tr><tr><th scope='row'>Indicação</th><td>R$ 814</td><td>R$ 2.067</td><td>R$ 1.755</td><td class='neg'>−R$ 312</td></tr><tr><th scope='row'>Orgânico</th><td>R$ 8.828</td><td>R$ 10.439</td><td>R$ 16.384</td><td class='pos'>+R$ 5.945</td></tr><tr><th scope='row'>Parceria operadora</th><td>R$ 1.236</td><td>R$ 3.509</td><td>R$ 4.557</td><td class='pos'>+R$ 1.048</td></tr><tr><th scope='row'>Social pago</th><td>R$ 5.452</td><td>R$ 11.318</td><td>R$ 14.273</td><td class='pos'>+R$ 2.954</td></tr><tr><th scope='row'>TV</th><td>R$ 3.567</td><td>R$ 5.487</td><td>R$ 7.022</td><td class='pos'>+R$ 1.535</td></tr></tbody></table></div>
+    </details>
+  </section>
+
+  <section aria-labelledby="s-sens">
+    <p class="eyebrow">Sensibilidade</p>
+    <h2 id="s-sens">A regra continua positiva em todas as taxas de aceite; o limiar de F1 passa a perder dinheiro com aceite de 15% ou menos</h2>
+    <p class="lead">Taxa de aceite e custo da oferta são premissas, não medições. A regra por cliente recalcula
+    seus limiares quando elas mudam; os cortes fixos, não. Em 18 de 20 cenários de aceite × custo
+    da oferta ela é a melhor regra. Com aceite de 15%, o limiar 0,5 fica um pouco à frente (R$ 3.662 contra R$ 1.865): com pouca margem, contatar só os casos mais certos vence. Com a oferta custando o dobro, a regra ainda rende R$ 15.924;
+    o F1, −R$ 40.430.</p>
+    <div class="card"><h3>Taxa de aceite entre quem ia sair</h3><div class="chart" id="aceite" role="img" aria-label="Valor líquido por taxa de aceite"></div></div>
+    <div class="grid3 g11">
+      <div class="card"><h3>Custo da oferta (1× = VOLTA50)</h3><div class="chart" id="oferta" role="img" aria-label="Valor líquido por custo da oferta"></div></div>
+      <div class="card"><h3>Fiéis que aceitam o desconto</h3><div class="chart" id="pesomorto" role="img" aria-label="Valor líquido por peso morto"></div></div>
+    </div>
+  </section>
+
+  <section class="rec" aria-labelledby="s-rec">
+    <p class="eyebrow" style="color:#8C98FF">Recomendação</p>
+    <h2 id="s-rec">Trocar o corte fixo pela regra por cliente e medir a taxa de aceite antes de escalar</h2>
+    <ol>
+      <li><strong>Adotar a regra de valor esperado</strong> na lista mensal de retenção: oferta só para quem tem
+      risco acima do limiar do próprio plano (16% a 29%). Com o mesmo modelo, rendeu R$ 54.617 contra
+      R$ 23.182 do limiar padrão.</li>
+      <li><strong>Rodar um teste com grupo de controle</strong> antes de escalar: a taxa de aceite (35%)
+      e a fração de fiéis que aceitam o desconto (35%) são as premissas que mais mexem no resultado, e
+      nenhum dado atual as mede.</li>
+      <li><strong>Atualizar mensalmente</strong> a calibração do modelo com o último mês fechado: um erro de unidade
+      no app 6.0 (tempo assistido gravado em milissegundos, não em segundos) bastou para derrubar as probabilidades pela metade.</li>
+      <li><strong>Não usar o limiar de F1 como atalho</strong>: com aceite de 15% ele perde dinheiro, porque contata quem está abaixo do próprio limiar.</li>
+    </ol>
+  </section>
+
+  <details>
+    <summary>Método, premissas e limites</summary>
+    <h4>Dados</h4>
+    <p>59.952 contas simuladas, 37 meses (out/2023 a out/2026), 11.151.592 reproduções e 56.231.976 eventos de
+    aplicativo. Cada linha do modelo é um assinante ativo no primeiro dia de um mês (605.245 linhas);
+    o alvo é pedir o cancelamento naquele mês (taxa média de 3,65%). Quem já pediu cancelamento e contas internas
+    ficam de fora.</p>
+    <h4>Validação no tempo</h4>
+    <p>Treino de jan/2024 a dez/2025; calibração e escolha do limiar de F1 de jan a abr/2026; teste de mai a
+    out/2026. Cada atributo usa só o que a empresa sabia antes da data de corte, e um teste automático reconstrói
+    os dados como estavam naquela data para provar isso.</p>
+    <h4>Modelo</h4>
+    <p>LightGBM com calibração isotônica: AUC de 0,863 no teste, risco médio previsto de 3,33% contra
+    3,36% observado. Regressão logística de referência: AUC 0,848; com a mesma regra, renderia
+    R$ 8.135.</p>
+    <h4>Economia</h4>
+    <p>Margem em risco = receita mensal (preço do plano em vigor, mais membro extra) × margem de 55% × 12
+    meses. A oferta é o cupom de reconquista da própria Cinelume (50% por 2 ciclos), custando cerca de uma
+    mensalidade. Premissas declaradas: aceite de 35% entre quem ia sair, 35% entre os fiéis,
+    contato de R$ 6. A aceitação é sorteada uma vez e vale para todas as regras.</p>
+    
+        <h4>O modelo encontrou o que a simulação plantou?</h4>
+        <p>Depois de os números acima estarem fechados, as previsões foram comparadas com a verdade da
+        simulação, que nunca entrou no treino. O risco previsto acompanha o engajamento latente de cada
+        assinante (correlação -0.54) e a queda de uso ao longo do tempo
+        (-0.45).</p>
+        <div class="table-wrap"><table><caption>Capacidade de separar quem sai de quem fica, por causa real do cancelamento</caption>
+        <thead><tr><th scope="col">Causa real</th><th scope="col">Cancelamentos no teste</th>
+        <th scope="col">AUC</th><th scope="col">No decil de maior risco</th></tr></thead>
+        <tbody><tr><th scope='row'>baixo engajamento</th><td>5,499</td><td>0,88</td><td>56%</td></tr><tr><th scope='row'>terminou uma série</th><td>162</td><td>0,49</td><td>4%</td></tr><tr><th scope='row'>problema técnico (buffering)</th><td>136</td><td>0,58</td><td>10%</td></tr><tr><th scope='row'>fim de promoção</th><td>85</td><td>0,85</td><td>52%</td></tr><tr><th scope='row'>perdeu o compartilhador</th><td>17</td><td>0,90</td><td>65%</td></tr></tbody></table></div>
+        <p>Pontos cegos: quem cancela por ter terminado uma série ou por problema técnico quase não se
+        distingue de quem fica. 111 contas-robô chegaram ao período de teste; a regra
+        não gastou oferta com nenhuma.</p>
+        <p>O e-mail de reengajamento era um experimento sorteado, e a análise inicial não percebeu. Comparando
+        sorteados e não sorteados com o mesmo tempo sem assistir, o efeito no cancelamento é
+        0,38% (IC 95% -0,22% a
+        0,99%): nenhum. Ele não traz oferta, então não mede a taxa de aceite.</p>
+    <h4>Limites</h4>
+    <p>Não há experimento de retenção com oferta nos dados: a regra prevê quem sai, não quem muda de ideia por
+    causa da oferta. Cada mês é tratado como campanha independente, sem período de carência entre contatos.
+    Os dados são simulados.</p>
+  </details>
+</main>
+<footer class="wrap">
+  <p>ABADE · Caso de retenção com dados simulados da Cinelume. Código, dados de origem e método completo em
+  <a href="https://github.com/arielabade/churn-cost-sensitive">github.com/arielabade/churn-cost-sensitive</a>.</p>
+</footer>
+<script src="plotly.min.js"></script>
+<script>
+const CHARTS = [{"id": "regras", "traces": [{"type": "bar", "roles": ["d05", "f1", "ev", "neutral"], "x": ["Limiar padrão 0,5", "Melhor F1", "Valor esperado por cliente", "Contatar ninguém"], "y": [23182.07, 43856.08, 54617.36, 0.0], "text": ["R$ 23.182", "R$ 43.856", "R$ 54.617", "R$ 0"], "textposition": "outside", "cliponaxis": false, "customdata": [["589", "124"], ["5.774", "590"], ["3.255", "430"], ["0", "0"]], "hovertemplate": "%{x}<br>Valor líquido: R$ %{y:,.0f}<br>Contatados: %{customdata[0]}<br>Salvos: %{customdata[1]}<extra></extra>"}], "layout": {"showlegend": false, "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "meses", "traces": [{"type": "bar", "role": "ev", "name": "Valor esperado por cliente", "x": ["mai/26", "jun/26", "jul/26", "ago/26", "set/26", "out/26"], "y": [9020.86, 9607.48, 7068.69, 8148.5, 9081.43, 11690.39], "hovertemplate": "%{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "f1", "name": "Melhor F1", "x": ["mai/26", "jun/26", "jul/26", "ago/26", "set/26", "out/26"], "y": [5290.99, 8546.25, 4661.09, 7337.53, 7594.78, 10425.44], "hovertemplate": "%{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "d05", "name": "Limiar padrão 0,5", "x": ["mai/26", "jun/26", "jul/26", "ago/26", "set/26", "out/26"], "y": [4574.37, 3812.13, 3720.69, 2222.74, 3671.03, 5181.12], "hovertemplate": "%{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "layout": {"barmode": "group", "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "planos", "traces": [{"type": "bar", "role": "ev", "name": "Valor esperado por cliente", "x": ["Básico", "Padrão", "Premium"], "y": [8081.88, 12497.76, 34037.73], "hovertemplate": "%{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "f1", "name": "Melhor F1", "x": ["Básico", "Padrão", "Premium"], "y": [2977.18, 8475.25, 32403.65], "hovertemplate": "%{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "d05", "name": "Limiar padrão 0,5", "x": ["Básico", "Padrão", "Premium"], "y": [4989.81, 5214.41, 12977.85], "hovertemplate": "%{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "layout": {"barmode": "group", "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "canais", "traces": [{"type": "bar", "role": "ev", "name": "Valor esperado por cliente", "x": ["Busca paga", "Indicação", "Orgânico", "Parceria operadora", "Social pago", "TV"], "y": [10627.28, 1754.83, 16384.0, 4557.04, 14272.57, 7021.64], "hovertemplate": "%{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "f1", "name": "Melhor F1", "x": ["Busca paga", "Indicação", "Orgânico", "Parceria operadora", "Social pago", "TV"], "y": [11035.35, 2067.28, 10439.24, 3509.14, 11318.31, 5486.77], "hovertemplate": "%{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "bar", "role": "d05", "name": "Limiar padrão 0,5", "x": ["Busca paga", "Indicação", "Orgânico", "Parceria operadora", "Social pago", "TV"], "y": [3285.2, 813.76, 8828.42, 1235.6, 5452.13, 3566.96], "hovertemplate": "%{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "layout": {"barmode": "group", "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "aceite", "traces": [{"type": "scatter", "mode": "lines+markers", "role": "ev", "name": "Valor esperado por cliente", "x": ["15%", "25%", "35%", "45%", "55%"], "y": [1865.1, 21556.86, 54617.36, 91778.18, 132175.11], "hovertemplate": "Taxa de aceite %{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "f1", "name": "Melhor F1", "x": ["15%", "25%", "35%", "45%", "55%"], "y": [-39067.65, 1395.21, 43856.08, 86343.72, 127042.32], "hovertemplate": "Taxa de aceite %{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "d05", "name": "Limiar padrão 0,5", "x": ["15%", "25%", "35%", "45%", "55%"], "y": [3661.78, 13512.36, 23182.07, 31937.02, 43932.94], "hovertemplate": "Taxa de aceite %{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "zero_line": true, "layout": {"xaxis": {"title": {"text": "Taxa de aceite"}, "type": "category"}, "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "oferta", "traces": [{"type": "scatter", "mode": "lines+markers", "role": "ev", "name": "Valor esperado por cliente", "x": ["0,5×", "1×", "1,5×", "2×"], "y": [94412.6, 54617.36, 30052.37, 15923.99], "hovertemplate": "Custo da oferta %{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "f1", "name": "Melhor F1", "x": ["0,5×", "1×", "1,5×", "2×"], "y": [85999.33, 43856.08, 1712.83, -40430.42], "hovertemplate": "Custo da oferta %{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "d05", "name": "Limiar padrão 0,5", "x": ["0,5×", "1×", "1,5×", "2×"], "y": [26843.34, 23182.07, 19520.79, 15859.52], "hovertemplate": "Custo da oferta %{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "zero_line": true, "layout": {"xaxis": {"title": {"text": "Custo da oferta"}, "type": "category"}, "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}, {"id": "pesomorto", "traces": [{"type": "scatter", "mode": "lines+markers", "role": "ev", "name": "Valor esperado por cliente", "x": ["0%", "10%", "20%", "35%", "50%"], "y": [170547.65, 111857.62, 73836.38, 54617.36, 44269.38], "hovertemplate": "Fiéis que aceitam o desconto %{x}<br>Valor esperado por cliente: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "f1", "name": "Melhor F1", "x": ["0%", "10%", "20%", "35%", "50%"], "y": [103589.15, 86969.36, 69678.15, 43856.08, 20533.53], "hovertemplate": "Fiéis que aceitam o desconto %{x}<br>Melhor F1: R$ %{y:,.0f}<extra></extra>"}, {"type": "scatter", "mode": "lines+markers", "role": "d05", "name": "Limiar padrão 0,5", "x": ["0%", "10%", "20%", "35%", "50%"], "y": [25361.15, 24932.27, 24047.97, 23182.07, 22491.49], "hovertemplate": "Fiéis que aceitam o desconto %{x}<br>Limiar padrão 0,5: R$ %{y:,.0f}<extra></extra>"}], "zero_line": true, "layout": {"xaxis": {"title": {"text": "Fiéis que aceitam o desconto"}, "type": "category"}, "yaxis": {"tickprefix": "R$ ", "separatethousands": true}}}];
+const THEMES = {
+  light: { ink: "#050505", muted: "#5C6168", grid: "#E2E0D7", zero: "#9AA0A8",
+           ev: "#4353E6", f1: "#B07A12", d05: "#1F8F6A", neutral: "#B9BDC3", hover: "#FFFFFF" },
+  dark:  { ink: "#F6F5F0", muted: "#9BA2AA", grid: "#24262B", zero: "#5C6168",
+           ev: "#5B6CFF", f1: "#BD8620", d05: "#1F9B73", neutral: "#3A3E46", hover: "#111214" }
+};
+function currentTheme() {
+  const attr = document.documentElement.dataset.theme;
+  if (attr === "light" || attr === "dark") return attr;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+function render() {
+  const t = THEMES[currentTheme()];
+  const narrow = window.innerWidth < 640;
+  for (const spec of CHARTS) {
+    const el = document.getElementById(spec.id);
+    if (!el) continue;
+    const data = spec.traces.map(tr => {
+      const c = JSON.parse(JSON.stringify(tr));
+      const color = c.roles ? c.roles.map(r => t[r]) : t[c.role];
+      delete c.role; delete c.roles;
+      if (c.type === "bar") { c.marker = { color: color, line: { width: 0 } }; c.textfont = { color: t.ink, family: "Lato" }; }
+      else { c.line = { color: color, width: 2 }; c.marker = { color: color, size: 8, line: { color: t.hover, width: 2 } }; }
+      return c;
+    });
+    const base = spec.layout || {};
+    const layout = Object.assign({}, base, {
+      paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+      font: { family: "Lato, Arial, sans-serif", color: t.muted, size: 13 },
+      margin: { l: 70, r: 12, t: data.length > 1 ? (el.clientWidth < 560 ? 92 : 56) : 24, b: narrow ? 70 : 48 },
+      bargap: 0.28, bargroupgap: 0.06, barcornerradius: 4,
+      hovermode: "closest", hoverlabel: { bgcolor: t.hover, bordercolor: t.grid, font: { color: t.ink, family: "Lato" } },
+      legend: { orientation: "h", x: 0, y: 1.02, yanchor: "bottom", font: { color: t.ink } },
+      xaxis: Object.assign({ gridcolor: t.grid, linecolor: t.grid, tickfont: { color: t.muted }, automargin: true }, base.xaxis || {}),
+      yaxis: Object.assign({ gridcolor: t.grid, zerolinecolor: t.zero, zerolinewidth: 1, tickfont: { color: t.muted }, automargin: true }, base.yaxis || {})
+    });
+    if (layout.xaxis.title) layout.xaxis.title = Object.assign({}, layout.xaxis.title, { font: { color: t.muted } });
+    Plotly.react(el, data, layout, { responsive: true, displayModeBar: false, locale: "pt-BR" });
+  }
+}
+document.getElementById("theme").addEventListener("click", () => {
+  document.documentElement.dataset.theme = currentTheme() === "dark" ? "light" : "dark";
+  try { localStorage.setItem("abade-theme", document.documentElement.dataset.theme); } catch (e) {}
+  render();
+});
+try { const saved = localStorage.getItem("abade-theme"); if (saved) document.documentElement.dataset.theme = saved; } catch (e) {}
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+let resizeTimer; window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 150); });
+render();
+</script>
+</body>
+</html>
