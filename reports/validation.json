@@ -1,0 +1,227 @@
+{
+  "escala": "x60",
+  "latentes": {
+    "eng_mu": {
+      "spearman": -0.5350168387762151,
+      "leitura": "engajamento-base (esperado: negativo)"
+    },
+    "drift": {
+      "spearman": -0.45439723811936056,
+      "leitura": "deriva mensal (esperado: negativo)"
+    },
+    "sens_preco": {
+      "spearman": 0.06872620056134052,
+      "leitura": "sensibilidade a preço"
+    },
+    "conexao": {
+      "spearman": -0.029555976396212207,
+      "leitura": "qualidade de conexão"
+    },
+    "risco_pag": {
+      "spearman": 0.02392585245700953,
+      "leitura": "risco de pagamento (afeta churn involuntário, não o alvo)"
+    }
+  },
+  "causas": [
+    {
+      "causa": "baixo engajamento",
+      "churners": 5499,
+      "risco_medio": 0.17668729217051665,
+      "auc_contra_fieis": 0.8797385158496497,
+      "no_decil_de_maior_risco": 0.5602836879432624,
+      "contatados_pela_regra": 0.2236770321876705
+    },
+    {
+      "causa": "terminou uma série",
+      "churners": 162,
+      "risco_medio": 0.027362419776577558,
+      "auc_contra_fieis": 0.49280646951727214,
+      "no_decil_de_maior_risco": 0.043209876543209874,
+      "contatados_pela_regra": 0.024691358024691357
+    },
+    {
+      "causa": "problema técnico (buffering)",
+      "churners": 136,
+      "risco_medio": 0.054220325987813525,
+      "auc_contra_fieis": 0.5841834814422211,
+      "no_decil_de_maior_risco": 0.09558823529411764,
+      "contatados_pela_regra": 0.03676470588235294
+    },
+    {
+      "causa": "fim de promoção",
+      "churners": 85,
+      "risco_medio": 0.13481070542561666,
+      "auc_contra_fieis": 0.845696146144185,
+      "no_decil_de_maior_risco": 0.5176470588235295,
+      "contatados_pela_regra": 0.11764705882352941
+    },
+    {
+      "causa": "(sem causa registrada)",
+      "churners": 49
+    },
+    {
+      "causa": "perdeu o compartilhador",
+      "churners": 17,
+      "risco_medio": 0.23275047486865552,
+      "auc_contra_fieis": 0.902414322669081,
+      "no_decil_de_maior_risco": 0.6470588235294118,
+      "contatados_pela_regra": 0.35294117647058826
+    },
+    {
+      "causa": "série saiu do catálogo",
+      "churners": 3,
+      "risco_medio": 0.017132848747570612,
+      "auc_contra_fieis": null,
+      "no_decil_de_maior_risco": 0.0,
+      "contatados_pela_regra": 0.0
+    }
+  ],
+  "padroes": {
+    "P1 queda de uso antecede o cancelamento": {
+      "melhor_feature": "reproducoes_28d",
+      "posicao": 1,
+      "ganho": 0.35611
+    },
+    "P2 sinais no app (tela de planos, tentativa)": {
+      "melhor_feature": "tentativas_cancelamento_28d",
+      "posicao": 3,
+      "ganho": 0.17218
+    },
+    "P9 reajuste de preço": {
+      "melhor_feature": "aviso_reajuste_45d",
+      "posicao": 29,
+      "ganho": 0.01448
+    },
+    "P10 fim de promoção": {
+      "melhor_feature": "desconto_termina_proxima_fatura",
+      "posicao": 14,
+      "ganho": 0.021399999999999995
+    },
+    "P11 canal de aquisição": {
+      "melhor_feature": "canal",
+      "posicao": 9,
+      "ganho": 0.03715
+    },
+    "P12 buffering": {
+      "melhor_feature": "buffering_por_reproducao_28d",
+      "posicao": 20,
+      "ganho": 0.01164
+    },
+    "P13 perda do compartilhador": {
+      "melhor_feature": "perfis",
+      "posicao": 4,
+      "ganho": 0.056229999999999995
+    },
+    "P16 anual perto da renovação": {
+      "melhor_feature": "dias_ate_renovacao",
+      "posicao": 6,
+      "ganho": 0.04865
+    },
+    "P17 ticket sem solução": {
+      "melhor_feature": "nota_suporte_180d",
+      "posicao": 54,
+      "ganho": 0.00115
+    },
+    "P5 fim de série (sem feature direta)": {
+      "melhor_feature": "titulos_28d",
+      "posicao": 7,
+      "ganho": 0.0484
+    }
+  },
+  "pistas_falsas": {
+    "F1 região": {
+      "melhor_feature": "regiao",
+      "posicao": 35,
+      "ganho": 0.00365
+    },
+    "F4 idade": {
+      "melhor_feature": "idade",
+      "posicao": 18,
+      "ganho": 0.01278
+    },
+    "F5 engajamento com interface": {
+      "melhor_feature": "taxa_abertura_push_90d",
+      "posicao": 25,
+      "ganho": 0.017759999999999998
+    },
+    "F6 nº de perfis / infantil": {
+      "melhor_feature": "perfis",
+      "posicao": 4,
+      "ganho": 0.05672
+    },
+    "FP2 e-mail de reengajamento": {
+      "melhor_feature": "reengajamento_35d",
+      "posicao": 62,
+      "ganho": 0.00032
+    }
+  },
+  "total_features": 71,
+  "contas_especiais": {
+    "funcionários": {
+      "linhas_no_teste": 0,
+      "contas": 0,
+      "contatados": 0
+    },
+    "contas de QA": {
+      "linhas_no_teste": 0,
+      "contas": 0,
+      "contatados": 0
+    },
+    "bots": {
+      "linhas_no_teste": 619,
+      "contas": 111,
+      "contatados": 0
+    }
+  },
+  "experimento_reengajamento": {
+    "elegiveis": 36775,
+    "share_tratado": 0.44184908225696806,
+    "efeito_pp": 0.38234042713066235,
+    "ic95_pp": [
+      -0.22451713490361408,
+      0.9891979891649388
+    ],
+    "faixas": [
+      {
+        "faixa_dias": "(14, 16]",
+        "tratados": 3123,
+        "controles": 4096,
+        "churn_com_email": 0.0787704130643612,
+        "churn_sem_email": 0.077880859375
+      },
+      {
+        "faixa_dias": "(16, 21]",
+        "tratados": 4882,
+        "controles": 6478,
+        "churn_com_email": 0.08275297009422368,
+        "churn_sem_email": 0.08397653596789133
+      },
+      {
+        "faixa_dias": "(21, 30]",
+        "tratados": 4522,
+        "controles": 5499,
+        "churn_com_email": 0.10128261831048209,
+        "churn_sem_email": 0.09401709401709402
+      },
+      {
+        "faixa_dias": "(30, 60]",
+        "tratados": 3722,
+        "controles": 4453,
+        "churn_com_email": 0.1340677055346588,
+        "churn_sem_email": 0.12485964518302269
+      }
+    ]
+  },
+  "correcao_ms": {
+    "corrigidas": 2316767,
+    "plantadas": 2327381,
+    "cobertura": 0.9954395090447159
+  },
+  "imperfeicoes_nao_tratadas": {
+    "variantes de dispositivos.tipo": "tipos_dispositivo conta grafias como tipos distintos",
+    "variantes de tickets_suporte.categoria": 786,
+    "eventos duplicados": 669800,
+    "eventos renomeados na 6.0 mobile (adicionar_lista)": 452697,
+    "bots e QA na população": "ver contas_especiais"
+  }
+}
